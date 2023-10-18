@@ -599,3 +599,24 @@ function showTranslation() {
 
 document.getElementById("startBtn").addEventListener("click", start);
 document.getElementById("nextWordBtn").addEventListener("click", getNextWord);
+
+/*cambiar color */
+
+function changeBackgroundColor() {
+	// Generar un color RGB aleatorio
+	const r = Math.floor(Math.random() * 256);
+	const g = Math.floor(Math.random() * 256);
+	const b = Math.floor(Math.random() * 256);
+
+	// Establecer una opacidad aleatoria entre 0.3 y 0.7
+	const a = (Math.random() * (0.5 - 0.3) + 0.3).toFixed(2);
+
+	// Establecer el nuevo color de fondo con opacidad
+	document.body.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${a})`;
+}
+
+// Establecer un color inicial aleatorio
+changeBackgroundColor();
+
+// Cambiar el color de fondo automáticamente cada 5 segundos
+setInterval(changeBackgroundColor, 10000);

@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Seleccionar Lección</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.7.3/css/uikit.min.css"
+		/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.7.3/js/uikit.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.7.3/js/uikit-icons.min.js"></script>
+		<style>
+			body {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				height: 100vh;
+				margin: 0;
+			}
+			#leccionesSelect {
+				max-width: 300px;
+				width: 100%;
+				margin: 20px auto;
+			}
+			.uk-subnav {
+				width: 100%;
+				max-width: 600px;
+			}
+
+			.uk-margin {
+				width: 100%;
+				max-width: 600px;
+			}
+			@media (max-width: 300px) {
+				.uk-subnav {
+					flex-direction: column;
+				}
+
+				.uk-subnav li {
+					width: 100%;
+					text-align: center;
+				}
+			}
+			button {
+				padding: 10px 20px;
+				border-radius: 8px;
+				background-color: #2b8b1a;
+				border: none;
+				color: white;
+				font-weight: bold;
+				font-size: 16px;
+				cursor: pointer;
+				margin-top: 20px;
+				transition: 0.3s;
+			}
+
+			button:hover {
+				background-color: #67bb90;
+			}
+
+			#displayPalabra {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.styled-select {
+				width: 100%;
+				padding: 10px 20px;
+				border-color: aqua;
+				border-radius: 15px;
+				font-size: 16px;
+				background-color: #ffffff;
+				color: #555;
+				appearance: none;
+				cursor: pointer;
+				outline: none;
+				transition: background-color 0.3s;
+			}
+
+			.styled-select:hover {
+				background-color: #ffffff;
+			}
+
+			/**/
+			#displayPalabra {
+				display: none;
+				width: 100%;
+				max-width: 600px;
+				margin: 50px auto;
+				text-align: center;
+				border: 1px solid #ffffff;
+
+				border-radius: 5px;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+				background-color: #fff;
+			}
+
+			.word-section {
+				margin: 20px 0;
+				padding: 10px;
+				border-radius: 4px;
+			}
+
+			.word-section p {
+				font-weight: bold;
+				margin-bottom: 10px;
+			}
+
+			.word-section div {
+				height: 50px;
+				line-height: 30px;
+				font-size: 18px;
+			}
+
+			#escucharBtn,
+			#siguienteBtn {
+				margin-top: 20px;
+				padding: 10px 20px;
+				border: none;
+				border-radius: 5px;
+				background-color: #25c6ea;
+				color: #fff;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+			}
+
+			#escucharBtn:hover,
+			#siguienteBtn:hover {
+				background-color: #6badf4;
+			}
+
+			#countdown {
+				font-size: 24px;
+				font-weight: bold;
+				margin-bottom: 20px;
+				color: #f58eeb;
+			}
+
+			.menu-back {
+				font-family: "Arial", sans-serif;
+				font-size: 16px;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+			}
+
+			.menu-icon {
+				margin-right: 8px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="menu-back">
+			<img src="Imagenes/casa.png" alt="Regresar" class="menu-icon" /> Regresar al menú
+		</div>
+
+		<h2>Selecciona la Lección:</h2>
+		<select id="leccionesSelect" class="styled-select">
+			<option value="" selected disabled>Seleccionar</option>
+		</select>
+
+		<div
+			class="container"
+			style="
+				background-color: rgb(255, 255, 255);
+				width: 50%;
+				min-width: 450px;
+				height: 80vh;
+				display: flex;
+				flex-direction: column;
+				margin: 0;
+				align-items: center;
+			"
+		>
+			<ul
+				class="uk-subnav uk-subnav-pill uk-flex-center"
+				uk-switcher="animation: uk-animation-slide-left-medium, uk-animation-slide-right-medium"
+				style="
+					background-color: white;
+					width: auto;
+					font-size: 2rem;
+					padding: 0;
+					margin: 0;
+					margin-top: 20px;
+				"
+			>
+				<li style="padding: 0"><a href="#">Ingles a Español</a></li>
+				<li style="padding: 0"><a href="#">Español a Ingles</a></li>
+			</ul>
+
+			<ul class="uk-switcher uk-margin">
+				<!--I-E-->
+				<li>
+					<div
+						class="ing-esp"
+						style="
+							background-color: rgb(255, 255, 255);
+							height: 60vh;
+							display: flex;
+							align-items: center;
+							margin: 0;
+							flex-direction: column;
+							justify-content: center;
+						"
+					>
+						<button onclick="iniciarJuego()" id="iniciarBtn">Iniciar</button>
+						<div id="displayPalabra">
+							<span id="countdown">3</span>
+
+							<div class="word-section" style="height: auto">
+								<p>Palabra:</p>
+								<div id="palabraIngles" style="font-size: 3.2rem; height: auto"></div>
+								<button
+									onclick="pronunciarPalabra()"
+									id="escucharBtn"
+									style="display: none; margin-top: 40px"
+								>
+									Escuchar
+								</button>
+							</div>
+
+							<div class="word-section">
+								<p>Pronunciación:</p>
+								<div id="pronunciacion" style="font-size: 1.5rem"></div>
+							</div>
+
+							<div class="word-section">
+								<p>Traducción:</p>
+								<div id="palabraEspanol" style="display: none; font-size: 2rem"></div>
+							</div>
+
+							<button id="siguienteBtn" onclick="siguientePalabra()" style="display: none">
+								Siguiente
+							</button>
+						</div>
+					</div>
+				</li>
+				<!--I-E-->
+				<li>
+					<div class="esp-ing">...proximamente...</div>
+				</li>
+			</ul>
+		</div>
+
+		<script>
+			const backButton = document.querySelector(".menu-back");
+			backButton.addEventListener("click", () => {
+				window.history.back();
+			});
+
+			function pronunciarPalabra() {
+				const palabra = document.getElementById("palabraIngles").innerText;
+				const msg = new SpeechSynthesisUtterance(palabra);
+				msg.lang = "en-US"; // Usando acento estadounidense. Puedes cambiar a 'en-GB' para acento británico si prefieres.
+				window.speechSynthesis.speak(msg);
+			}
+
+			// Repetimos la estructura de datos para el ejemplo, pero en un caso real, probablemente querrás cargar esto desde una API o un archivo externo
+			const data = {
+				libros: [
+					{
+						nombre: "Libro 1",
+						lecciones: [
+							{
+								nombre: "Lección 1",
+								palabras: [
+									{ingles: "apple", pronunciacion: "ˈæp.əl", espanol: "manzana"},
+									{ingles: "dog", pronunciacion: "dɒɡ", espanol: "perro"},
+									{ingles: "sun", pronunciacion: "sʌn", espanol: "sol"},
+								],
+								verbos: [{}],
+							},
+							{
+								nombre: "Lección 2",
+								palabras: [
+									{ingles: "moon", pronunciacion: "muːn", espanol: "luna"},
+									{ingles: "star", pronunciacion: "stɑːr", espanol: "estrella"},
+									{ingles: "water", pronunciacion: "ˈwɔː.tər", espanol: "agua"},
+								],
+							},
+							{
+								nombre: "Lección 3",
+								palabras: [
+									{ingles: "fire", pronunciacion: "ˈfaɪər", espanol: "fuego"},
+									{ingles: "earth", pronunciacion: "ɜːrθ", espanol: "tierra"},
+									{ingles: "air", pronunciacion: "eər", espanol: "aire"},
+								],
+							},
+						],
+					},
+					{
+						nombre: "Libro 2",
+						lecciones: [
+							// ... estructura similar a las lecciones del libro 1 ...
+							{
+								nombre: "Lección 1",
+								palabras: [
+									{ingles: "Conditions", pronunciacion: "condíchns", espanol: "condiciones"},
+									{ingles: "Standard", pronunciacion: "stændrd", espanol: "standard, promedio"},
+									{
+										ingles: "Too Long",
+										pronunciacion: "tú lóng",
+										espanol: "demasiado (tiempo - distancia)",
+									},
+									{
+										ingles: "Answering machine",
+										pronunciacion: "ansering machín",
+										espanol: "maquina contestadora",
+									},
+									{
+										ingles: "Down",
+										pronunciacion: "dáun",
+										espanol: "abajo, debajo, deprimido (a, os, as)",
+									},
+									{
+										ingles: "Over",
+										pronunciacion: "óvr",
+										espanol: "arriba, encima de, por arriba, encima de",
+									},
+									{ingles: "Vacuum cleaner", pronunciacion: "vákium clínr", espanol: "aspiradora"},
+									{
+										ingles: "Cook ware",
+										pronunciacion: "cúk wuér",
+										espanol: "juego de ollas (cocina)",
+									},
+									{ingles: "Footwear store", pronunciacion: "fútwuér stór", espanol: "zapatería"},
+									{ingles: "Useful", pronunciacion: "llúsfl", espanol: "útil (es)"},
+									{ingles: "First", pronunciacion: "frst", espanol: "primero (a, os, as)"},
+									{ingles: "Price tag", pronunciacion: "práis tég", espanol: "etiqueta"},
+									{ingles: "Commonly", pronunciacion: "cómonli", espanol: "comunmente, usualmente"},
+									{ingles: "Less", pronunciacion: "lés", espanol: "menos, sin (para alimentos)"},
+									{ingles: "Option", pronunciacion: "ápchn", espanol: "opción, selección"},
+									{ingles: "Second", pronunciacion: "Sécond", espanol: "Segundo"},
+									{ingles: "Woman", pronunciacion: "woman", espanol: "mujer"},
+									{ingles: "Women", pronunciacion: "wuimen", espanol: "mujeres"},
+									{ingles: "Man", pronunciacion: "mán", espanol: "hombre"},
+									{ingles: "Men", pronunciacion: "mén", espanol: "hombres"},
+								],
+							},
+							{
+								nombre: "Lección 2",
+								palabras: [
+									{ingles: "Available", pronunciacion: "avéilabl", espanol: "disponible (s)"},
+									{
+										ingles: "Unavailable",
+										pronunciacion: "onavéilabl",
+										espanol: "no disponible (s)",
+									},
+									{ingles: "Warranty", pronunciacion: "warranti", espanol: "garantía"},
+									{ingles: "Guarantee", pronunciacion: "gérrenti", espanol: "garantía"},
+									{ingles: "Variable", pronunciacion: "vérriabl", espanol: "variable (s)"},
+									{
+										ingles: "Separation",
+										pronunciacion: "seperréichn",
+										espanol: "separación (gral)",
+									},
+									{ingles: "Rejection", pronunciacion: "rillékchn", espanol: "rechazo, negación"},
+									{
+										ingles: "Outlet store",
+										pronunciacion: "áulet stór",
+										espanol: "tienda de mayoreo",
+									},
+									{ingles: "Then", pronunciacion: "dén", espanol: "después, más tarde"},
+									{ingles: "Out of town", pronunciacion: "áravtáun", espanol: "fuera de la ciudad"},
+									{
+										ingles: "Out of order",
+										pronunciacion: "áravórer",
+										espanol: "fuera de servicio, no funciona, no sirve",
+									},
+									{ingles: "Late", pronunciacion: "léit", espanol: "tarde"},
+									{ingles: "Later", pronunciacion: "léirer", espanol: "más tarde"},
+									{ingles: "Later on", pronunciacion: "léirer ón", espanol: "después o más tarde"},
+									{
+										ingles: "Immediately",
+										pronunciacion: "inmíriatli",
+										espanol: "inmediatamente, rápido",
+									},
+									{
+										ingles: "Right away",
+										pronunciacion: "ráirawuéi",
+										espanol: "inmediatamente, rápido",
+									},
+									{ingles: "Refund", pronunciacion: "rífond", espanol: "reembolso, devolución"},
+									{ingles: "Real value", pronunciacion: "ríl væliu", espanol: "valor real"},
+									{
+										ingles: "Picture",
+										pronunciacion: "píkchr",
+										espanol: "cuadro, fotografía, pintura, película",
+									},
+									{
+										ingles: "Engagement",
+										pronunciacion: "ingéichment",
+										espanol: "compromiso (matrimonial)",
+									},
+									{
+										ingles: "Appointment",
+										pronunciacion: "apóintment",
+										espanol: "compromiso (gral), cita",
+									},
+									{ingles: "Date", pronunciacion: "déit", espanol: "día, fecha, cíta (amorosa)"},
+								],
+							},
+
+							{
+								nombre: "Lección 4",
+								palabras: [
+									{ingles: "Remarkable", pronunciacion: "rimárkabl", espanol: "extraordinario"},
+									{ingles: "Near", pronunciacion: "nír", espanol: "cerca, junto a"},
+									{
+										ingles: "Close to",
+										pronunciacion: "clóus tú",
+										espanol: "cerca de, junto a, a un lado de, enseguida de",
+									},
+									{ingles: "Far", pronunciacion: "fár", espanol: "lejos"},
+									{ingles: "Fast", pronunciacion: "fæst", espanol: "rápido, de prisa, ayuno"},
+									{ingles: "Faster", pronunciacion: "fæstr", espanol: "más rapido, más aprisa"},
+									{
+										ingles: "Very likely",
+										pronunciacion: "vérri láikli",
+										espanol: "muy posiblemente, muy probable",
+									},
+									{
+										ingles: "Very unlikely",
+										pronunciacion: "vérri onláikli",
+										espanol: "no es posible, es poco probable",
+									},
+									{
+										ingles: "Later than usual",
+										pronunciacion: "léirer dæn llúchual",
+										espanol: "más tarde que de costumbre",
+									},
+									{
+										ingles: "The sooner the better",
+										pronunciacion: "dá súnr dá bérer",
+										espanol: "entre más pronto mejor",
+									},
+									{ingles: "Quick", pronunciacion: "kúik", espanol: "rápido, aprisa"},
+									{ingles: "Quickly", pronunciacion: "kúikli", espanol: "rápidamente"},
+									{
+										ingles: "Before",
+										pronunciacion: "bifór",
+										espanol: "antes, anterior, anteriormente",
+									},
+									{
+										ingles: "After",
+										pronunciacion: "áftr",
+										espanol: "después, posterior, posteriormente",
+									},
+									{ingles: "Previous", pronunciacion: "prívios", espanol: "previo, anterior"},
+									{
+										ingles: "Previously",
+										pronunciacion: "príviosli",
+										espanol: "previamente, anteriormente",
+									},
+									{ingles: "Simply", pronunciacion: "símpli", espanol: "simplemente"},
+									{
+										ingles: "Behind",
+										pronunciacion: "bijáaind",
+										espanol: "atrás de, detrás de, atrasado (a, os, as)",
+									},
+									{
+										ingles: "Cleareance",
+										pronunciacion: "clírens",
+										espanol: "ultima venta, super rebaja, venta de liquidación",
+									},
+									{ingles: "Appliences", pronunciacion: "apláienses", espanol: "linea blanca"},
+									{ingles: "Claim", pronunciacion: "kléim", espanol: "reclamo, queja"},
+									{
+										ingles: "yet",
+										pronunciacion: "llét",
+										espanol: "todavía (se usa al final de la oración)",
+									},
+									{ingles: "Availability", pronunciacion: "aveilabíly", espanol: "disponibilidad"},
+								],
+							},
+							{
+								nombre: "Lección 5",
+								palabras: [
+									{ingles: "Spoon", pronunciacion: "spún", espanol: "cuchara"},
+									{ingles: "Tea spoon", pronunciacion: "tí spún", espanol: "cucharita"},
+									{ingles: "Bowl", pronunciacion: "bóul", espanol: "sopera o tazón, plato hondo"},
+									{
+										ingles: "Plates",
+										pronunciacion: "pléits",
+										espanol: "platos, platillos, placas de coche",
+									},
+									{ingles: "Cups", pronunciacion: "cóps", espanol: "tazas, vasos desechables"},
+									{ingles: "Meal", pronunciacion: "míl", espanol: "comida (preparada)"},
+									{
+										ingles: "Morning meal",
+										pronunciacion: "mórning míl",
+										espanol: "comida de la mañana",
+									},
+									{
+										ingles: "Evening meal",
+										pronunciacion: "ivning míl",
+										espanol: "comida de la tarde o cena",
+									},
+									{ingles: "Breakfast", pronunciacion: "brékfæst", espanol: "desayuno o almuerzo"},
+									{
+										ingles: "Light breakfast",
+										pronunciacion: "láit brékfæst",
+										espanol: "desayuno ligero",
+									},
+									{ingles: "Toast", pronunciacion: "tóust", espanol: "pan tostado o brindis"},
+									{ingles: "Plain bread", pronunciacion: "pléin bréd", espanol: "pan natural"},
+									{ingles: "Butter", pronunciacion: "bárer", espanol: "mantequilla"},
+									{ingles: "Jelly", pronunciacion: "lléli", espanol: "jalea, mermelada"},
+									{
+										ingles: "Jam",
+										pronunciacion: "llém",
+										espanol: "mermelada (preparada), atasco , embotellamiento",
+									},
+									{
+										ingles: "a lot",
+										pronunciacion: "a lát",
+										espanol: "mucho (a, os, as) se usa al final de la oración",
+									},
+									{
+										ingles: "A lot of",
+										pronunciacion: "alárav",
+										espanol: "mucho (a, os, as) se usa en medio o al principio de la oración",
+									},
+									{ingles: "Many", pronunciacion: "méni", espanol: "mucho (a, os, as)"},
+									{
+										ingles: "Too much",
+										pronunciacion: "tú móch",
+										espanol: "demasiado o mucho (a, os, as)",
+									},
+									{ingles: "Quantity", pronunciacion: "cúantiti", espanol: "cantidad"},
+									{ingles: "Everybody", pronunciacion: "évribári", espanol: "todo mundo"},
+								],
+							},
+							{
+								nombre: "Lección 5 Relatives",
+								palabras: [
+									{ingles: "Father", pronunciacion: "fádr", espanol: "papá, padre"},
+									{ingles: "Mother", pronunciacion: "módr", espanol: "mamá o madre"},
+									{ingles: "Dad", pronunciacion: "déd", espanol: "papá o papy"},
+									{ingles: "Daddy", pronunciacion: "déri", espanol: "papy, papíto (cariñosamente)"},
+									{ingles: "Mom", pronunciacion: "mám", espanol: "mamá o mamy"},
+									{
+										ingles: "Mommy",
+										pronunciacion: "mámi",
+										espanol: "mamy o mamita (cariñosamente)",
+									},
+									{ingles: "Daughter", pronunciacion: "dárer", espanol: "hija"},
+									{ingles: "Son", pronunciacion: "són", espanol: "hijo"},
+									{ingles: "Grandfather", pronunciacion: "gréndfádr", espanol: "abuelo"},
+									{ingles: "Grandmother", pronunciacion: "gréndmódr", espanol: "abuela"},
+									{ingles: "Grand ma", pronunciacion: "grénd má", espanol: "abuelita"},
+									{ingles: "Grand pa", pronunciacion: "grénd pá", espanol: "abuelito"},
+									{ingles: "Granny", pronunciacion: "gréni", espanol: "abuelito, abuelita"},
+									{ingles: "Aunt", pronunciacion: "ént", espanol: "tia"},
+									{ingles: "Uncle", pronunciacion: "ónkl", espanol: "tio"},
+									{ingles: "Cousin", pronunciacion: "cósin", espanol: "primo (a, os, as)"},
+									{ingles: "Nephew", pronunciacion: "néfiu", espanol: "sobrino"},
+									{ingles: "Niece", pronunciacion: "nís", espanol: "sobrina"},
+									{
+										ingles: "Relatives",
+										pronunciacion: "rélativs",
+										espanol: "parientes, familiares",
+									},
+									{ingles: "Parents", pronunciacion: "pérrents", espanol: "padres"},
+									{ingles: "Father in law", pronunciacion: "fádr in ló", espanol: "suegro"},
+									{ingles: "Mother in law", pronunciacion: "módr in ló", espanol: "suegra"},
+									{ingles: "Brother in law", pronunciacion: "bródr in ló", espanol: "cuñado"},
+									{ingles: "Sister in law", pronunciacion: "sístr in ló", espanol: "cuñada"},
+									{ingles: "Daughter in law", pronunciacion: "dárer in ló", espanol: "nuera"},
+									{ingles: "Son in law", pronunciacion: "són in ló", espanol: "yerno"},
+									{ingles: "God father", pronunciacion: "gád fádr", espanol: "padrino"},
+									{ingles: "God mother", pronunciacion: "gád módr", espanol: "madrina"},
+									{ingles: "God daughter", pronunciacion: "gád dárer", espanol: "ahijada"},
+									{ingles: "God son", pronunciacion: "gád són", espanol: "ahijado"},
+									{ingles: "Stepfather", pronunciacion: "stép fádr", espanol: "padrastro"},
+									{ingles: "Stepmother", pronunciacion: "stép módr", espanol: "madrastra"},
+									{ingles: "Stepson", pronunciacion: "stép són", espanol: "hijastro"},
+									{ingles: "Stepdaughter", pronunciacion: "stép dárer", espanol: "hijastra"},
+									{ingles: "Keens", pronunciacion: "kíns", espanol: "parientes o familiares"},
+									{
+										ingles: "Folks",
+										pronunciacion: "fouks",
+										espanol: "padres, parientes, amigos, cuates",
+									},
+									{
+										ingles: "Great grandfather",
+										pronunciacion: "gréit gréndfadr",
+										espanol: "bisabuelo",
+									},
+									{
+										ingles: "Great grandmother",
+										pronunciacion: "gréit gréndmódr",
+										espanol: "bisabuela",
+									},
+									{ingles: "Siblings", pronunciacion: "siblings", espanol: "hermanos (as)"},
+								],
+							},
+							{
+								nombre: "Lección 6",
+								palabras: [
+									{ingles: "Margarine", pronunciacion: "márllarin", espanol: "margarina"},
+									{
+										ingles: "French toast",
+										pronunciacion: "frénch tóust",
+										espanol: "pan tostado con canela, bolillo o pan blanco",
+									},
+									{
+										ingles: "Flour tortillas",
+										pronunciacion: "fláuer trtillas",
+										espanol: "tortillas de harina",
+									},
+									{
+										ingles: "Corn Tortillas",
+										pronunciacion: "córn trtillas",
+										espanol: "tortillas de maíz",
+									},
+									{ingles: "Bacon", pronunciacion: "béikn", espanol: "tocino"},
+									{ingles: "Ham", pronunciacion: "jém", espanol: "jamón"},
+									{
+										ingles: "Sausage",
+										pronunciacion: "sósech",
+										espanol: "chorizo (alemán para asar)",
+									},
+									{
+										ingles: "Chili Sauce",
+										pronunciacion: "chíli sós",
+										espanol: "salsa de chili (frijol con carne molida)",
+									},
+									{
+										ingles: "Round Sausage",
+										pronunciacion: "ráund sósech",
+										espanol: "chorizo de rodajas",
+									},
+									{ingles: "Link sausage", pronunciacion: "línk sósech", espanol: "choricitos"},
+									{
+										ingles: "Hash browns",
+										pronunciacion: "jésch bráuns",
+										espanol: "papitas rayadas",
+									},
+									{ingles: "Beans", pronunciacion: "bíns", espanol: "frijoles"},
+									{ingles: "Sauce", pronunciacion: "sós", espanol: "salsa"},
+									{ingles: "Picante Sauce", pronunciacion: "picáne sós", espanol: "salsa picante"},
+									{ingles: "Hot", pronunciacion: "ját", espanol: "caliente o picosa"},
+									{ingles: "Mild", pronunciacion: "máild", espanol: "suave o templado"},
+									{ingles: "Eggs", pronunciacion: "égs", espanol: "huevos o blanquillos"},
+									{
+										ingles: "Scrambled eggs",
+										pronunciacion: "scrémbld égs",
+										espanol: "huevos revueltos",
+									},
+									{
+										ingles: "Over easy eggs",
+										pronunciacion: "óvr ísi égs",
+										espanol: "huevos volteados",
+									},
+									{
+										ingles: "Sunny side up eggs",
+										pronunciacion: "sóni sáirop égs",
+										espanol: "huevos estrellados",
+									},
+									{ingles: "Juice", pronunciacion: "llús", espanol: "jugo"},
+									{
+										ingles: "Deli",
+										pronunciacion: "delí",
+										espanol: "sándwich (condimentación especial)",
+									},
+									{ingles: "Fork", pronunciacion: "fórk", espanol: "tenedor"},
+									{ingles: "Knife", pronunciacion: "náif", espanol: "cuchillo, navaja"},
+									{
+										ingles: "Omelette",
+										pronunciacion: "ómlet",
+										espanol: "omelete, tortilla de huevo",
+									},
+									{ingles: "Boiled eggs", pronunciacion: "bóild égs", espanol: "huevos tibios"},
+									{
+										ingles: "Hard boiled eggs",
+										pronunciacion: "járd bóiled égs",
+										espanol: "huevos cocidos",
+									},
+									{
+										ingles: "Steak knife",
+										pronunciacion: "stéik náif",
+										espanol: "cuchillo para carnes",
+									},
+									{
+										ingles: "Glass",
+										pronunciacion: "glæs",
+										espanol: "vaso, lente, vidrio o cristal",
+									},
+									{
+										ingles: "Glasses",
+										pronunciacion: "glæses",
+										espanol: "vasos, lentes, vidrios o cristales",
+									},
+									{
+										ingles: "Anything",
+										pronunciacion: "énidíng",
+										espanol: "lo que sea, cualquier cosa",
+									},
+								],
+							},
+							{
+								nombre: "Lección 8",
+								palabras: [
+									{ingles: "Bacon strip", pronunciacion: "béikn stríp", espanol: "tira de tocino"},
+									{ingles: "Cafeteria", pronunciacion: "kafetírria", espanol: "cafetería"},
+									{ingles: "Cook", pronunciacion: "cúk", espanol: "cocinero (a)"},
+									{ingles: "Cooker", pronunciacion: "cúkr", espanol: "olla de vapor, express"},
+									{
+										ingles: "Favorite",
+										pronunciacion: "féivret",
+										espanol: "favorito, preferido, (a, os, as) el que me gusta",
+									},
+									{ingles: "Cereal", pronunciacion: "sírrial", espanol: "cereal"},
+									{ingles: "Pan cakes", pronunciacion: "pén kéiks", espanol: "hot cakes"},
+									{ingles: "Biscuits", pronunciacion: "bískets", espanol: "bisquets"},
+									{ingles: "Syrup", pronunciacion: "sírrop", espanol: "miel, jarabe"},
+									{ingles: "Maple", pronunciacion: "méipl", espanol: "maple"},
+									{ingles: "Own", pronunciacion: "óun", espanol: "propio (a, os, as)"},
+									{ingles: "Oatmeal", pronunciacion: "óutmíl", espanol: "avena"},
+									{
+										ingles: "Delicious",
+										pronunciacion: "delíchus",
+										espanol: "delicioso, sabroso, rico (a,os,as)",
+									},
+									{
+										ingles: "Instead of",
+										pronunciacion: "ínstérof",
+										espanol: "en vez de, en lugar de",
+									},
+									{ingles: "Portion", pronunciacion: "pórchn", espanol: "porción"},
+									{ingles: "check", pronunciacion: "chék", espanol: "cheque, cuenta (de consumo)"},
+									{ingles: "Bill", pronunciacion: "bíl", espanol: "cuenta o billete"},
+									{ingles: "Order", pronunciacion: "órer", espanol: "orden o pedido"},
+									{ingles: "Coffee", pronunciacion: "cófi", espanol: "café (la bebida)"},
+									{ingles: "Food", pronunciacion: "fúd", espanol: "comida (no preparada)"},
+									{ingles: "All day long", pronunciacion: "ól déi lóng", espanol: "todo el dia"},
+								],
+							},
+							{
+								nombre: "Lección 9",
+								palabras: [
+									{ingles: "Sugarless", pronunciacion: "chúgrlés", espanol: "sin azúcar"},
+									{
+										ingles: "Substitute sugar",
+										pronunciacion: "sóbstitiut chúgr",
+										espanol: "substituto de azúcar",
+									},
+									{ingles: "Milk", pronunciacion: "mílk", espanol: "leche"},
+									{ingles: "Cream", pronunciacion: "crím", espanol: "crema"},
+									{ingles: "Calories", pronunciacion: "kálorris", espanol: "calorias"},
+									{
+										ingles: "Low fat milk",
+										pronunciacion: "lóu fat mílk",
+										espanol: "leche baja en grasa",
+									},
+									{ingles: "Free", pronunciacion: "frí", espanol: "libre, gratis o sin"},
+									{ingles: "Cholesterol", pronunciacion: "colésterol", espanol: "colesterol"},
+									{
+										ingles: "Sack",
+										pronunciacion: "sák",
+										espanol: "paquetito, sobresito, tacleada (fútbol americano)",
+									},
+									{ingles: "Caffeine", pronunciacion: "káfin", espanol: "cafeína"},
+									{
+										ingles: "Pork sausage",
+										pronunciacion: "pórk sósech",
+										espanol: "chorizo de puerco",
+									},
+									{ingles: "Mixture", pronunciacion: "míks-chr", espanol: "mezcla"},
+									{
+										ingles: "Refried beans",
+										pronunciacion: "rífraid bíns",
+										espanol: "frijoles refritos",
+									},
+									{ingles: "Fruit", pronunciacion: "frút", espanol: "fruta"},
+									{ingles: "Corn", pronunciacion: "córn", espanol: "maíz, elote, callo del pie"},
+									{ingles: "Waffles", pronunciacion: "wafls", espanol: "waffles"},
+									{
+										ingles: "Nice",
+										pronunciacion: "náis",
+										espanol: "amable, corte, atento, bonito (a, os, as)",
+									},
+									{
+										ingles: "Kind",
+										pronunciacion: "káind",
+										espanol: "amable, cortes, atento, clase, tipo",
+									},
+									{ingles: "Kindly", pronunciacion: "kaíndli", espanol: "amablemente, cortésmente"},
+								],
+							},
+							{
+								nombre: "Lección 10",
+								palabras: [
+									{ingles: "Fat free", pronunciacion: "fæt frí", espanol: "sin grasa"},
+									{
+										ingles: "Appropriate",
+										pronunciacion: "aprópiet",
+										espanol: "apropiado (a, os, as)",
+									},
+									{ingles: "Low in fat", pronunciacion: "lóu ín fét", espanol: "bajo en grasa"},
+									{ingles: "High in fat", pronunciacion: "jái ín fét", espanol: "alto en grasa"},
+									{ingles: "Fat", pronunciacion: "fét", espanol: "grasa, gordo"},
+									{
+										ingles: "Over weight",
+										pronunciacion: "óvr wuéit",
+										espanol: "sobre peso, exceso de peso",
+									},
+									{ingles: "Weight", pronunciacion: "wuéit", espanol: "peso"},
+									{
+										ingles: "Cooking oil",
+										pronunciacion: "cúking óil",
+										espanol: "aceite para cocinar",
+									},
+									{ingles: "Again", pronunciacion: "agén", espanol: "otra vez o de nuevo"},
+									{ingles: "Cake", pronunciacion: "kéik", espanol: "pastel"},
+									{ingles: "Pie", pronunciacion: "pái", espanol: "pastelito o pai"},
+									{ingles: "Diet", pronunciacion: "dáiet", espanol: "dieta"},
+									{ingles: "Crash diet", pronunciacion: "krésch dáiet", espanol: "dieta rigurosa"},
+									{ingles: "Season", pronunciacion: "sísn", espanol: "sason, temporada, estación"},
+									{ingles: "Menu", pronunciacion: "méniu", espanol: "menu o carta"},
+									{ingles: "Chocolate", pronunciacion: "cháklet", espanol: "chocolate"},
+									{ingles: "Salt", pronunciacion: "sólt", espanol: "sal"},
+									{
+										ingles: "Jalapeno pepper",
+										pronunciacion: "jálapeño pépr",
+										espanol: "chile jalapeño",
+									},
+									{ingles: "Skim milk", pronunciacion: "skím mílk", espanol: "leche descremada"},
+									{ingles: "Taste", pronunciacion: "téist", espanol: "sabor, gusto"},
+									{ingles: "Piece", pronunciacion: "pís", espanol: "pedazo, pieza"},
+									{ingles: "Slice", pronunciacion: "sláis", espanol: "rebanada, pedazo, tajada"},
+									{ingles: "Salted", pronunciacion: "sólted", espanol: "salado"},
+									{ingles: "Pepper", pronunciacion: "pépr", espanol: "pimienta"},
+									{ingles: "Grease", pronunciacion: "grís", espanol: "grasa o vaselina"},
+									{ingles: "Greasy", pronunciacion: "grísi", espanol: "grasoso o grasosa"},
+									{
+										ingles: "Lean",
+										pronunciacion: "lín",
+										espanol: "delgado, esbelto, sin grasa, magra",
+									},
+									{ingles: "Pounds", pronunciacion: "páunds", espanol: "libras"},
+									{ingles: "Lunch", pronunciacion: "lónch", espanol: "comida"},
+									{ingles: "Dinner", pronunciacion: "dínr", espanol: "cena"},
+									{ingles: "Supper", pronunciacion: "sóper", espanol: "cena casera"},
+									{ingles: "A little bit", pronunciacion: "a lírl bít", espanol: "un poquito"},
+								],
+							},
+							//	{
+							//	nombre: "Lección 11",
+							//	palabras: [],
+							//	},
+
+							//... lecciones 2 y 3 con sus respectivas palabras ...
+						],
+					},
+				],
+				//... más libros y lecciones
+			};
+
+			let leccionActual = [];
+			let palabraIndex = -1;
+			const libroIndex = new URLSearchParams(window.location.search).get("libro");
+
+			window.onload = () => {
+				cargarLecciones(libroIndex);
+			};
+
+			function cargarLibros() {
+				const select = document.getElementById("librosSelect");
+				data.libros.forEach((libro, index) => {
+					const option = document.createElement("option");
+					option.value = index;
+					option.text = libro.nombre;
+					select.appendChild(option);
+				});
+
+				select.onchange = (e) => {
+					cargarLecciones(e.target.value);
+				};
+			}
+
+			function cargarLecciones(libroIndex) {
+				const lecciones = data.libros[libroIndex].lecciones;
+				const select = document.getElementById("leccionesSelect");
+				select.innerHTML = ""; // Limpiamos las opciones anteriores
+				lecciones.forEach((leccion, index) => {
+					const option = document.createElement("option");
+					option.value = index;
+					option.text = leccion.nombre;
+					select.appendChild(option);
+				});
+
+				select.style.display = "";
+				document.querySelector("button").style.display = "";
+			}
+
+			function iniciarJuego() {
+				palabraIndex = -1;
+				leccionActual =
+					data.libros[libroIndex].lecciones[document.getElementById("leccionesSelect").value]
+						.palabras;
+				shuffleArray(leccionActual);
+				document.getElementById("iniciarBtn").style.display = "none";
+
+				document.getElementById("displayPalabra").style.display = "block";
+
+				siguientePalabra();
+			}
+
+			function siguientePalabra() {
+				palabraIndex++;
+
+				if (palabraIndex < leccionActual.length) {
+					const palabra = leccionActual[palabraIndex];
+					document.getElementById("palabraIngles").innerText = palabra.ingles;
+					document.getElementById("pronunciacion").innerText = palabra.pronunciacion;
+					document.getElementById("palabraEspanol").innerText = "";
+					document.getElementById("palabraEspanol").style.display = "none";
+					document.getElementById("siguienteBtn").style.display = "none";
+					document.getElementById("escucharBtn").style.display = "";
+					document.getElementById("countdown").style.display = ""; // Asegúrate de que el contador esté visible
+
+					// Iniciar cuenta regresiva
+					let tiempoRestante = 3; // en segundos
+					document.getElementById("countdown").innerText = tiempoRestante;
+
+					const intervalo = setInterval(() => {
+						tiempoRestante--;
+						document.getElementById("countdown").innerText = tiempoRestante;
+
+						if (tiempoRestante <= 0) {
+							clearInterval(intervalo);
+
+							document.getElementById("palabraEspanol").style.display = "";
+							document.getElementById("palabraEspanol").innerText = palabra.espanol;
+							document.getElementById("siguienteBtn").style.display = "";
+							document.getElementById("countdown").style.display = "none"; // Oculta el contador aquí
+						}
+					}, 1000);
+				} else {
+					finalizarLeccion();
+				}
+			}
+
+			function finalizarLeccion() {
+				let reiniciar = window.confirm("¡Lección completada! ¿Quieres jugar de nuevo?");
+				if (reiniciar) {
+					palabraIndex = -1;
+					shuffleArray(leccionActual);
+					siguientePalabra();
+				} else {
+					// Muestra el botón de inicio nuevamente y esconde el bloque de palabras
+					document.getElementById("iniciarBtn").style.display = "";
+					document.getElementById("displayPalabra").style.display = "none";
+				}
+			}
+
+			// Función para mezclar las palabras de forma aleatoria
+			function shuffleArray(array) {
+				for (let i = array.length - 1; i > 0; i--) {
+					const j = Math.floor(Math.random() * (i + 1));
+					[array[i], array[j]] = [array[j], array[i]];
+				}
+			}
+		</script>
+	</body>
+</html>
