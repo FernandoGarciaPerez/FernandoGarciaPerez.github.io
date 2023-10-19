@@ -90,7 +90,7 @@
 				display: none;
 				width: 100%;
 				max-width: 600px;
-				margin: 50px auto;
+				margin: 50px auto 20px auto;
 				text-align: center;
 				border: 1px solid #ffffff;
 
@@ -136,7 +136,7 @@
 			#countdown {
 				font-size: 24px;
 				font-weight: bold;
-				margin-bottom: 20px;
+				/*margin-bottom: 5px;*/
 				color: #f58eeb;
 			}
 
@@ -160,7 +160,7 @@
 		</div>
 
 		<h2>Selecciona la Lección:</h2>
-		<select id="leccionesSelect" class="styled-select">
+		<select id="leccionesSelect" class="styled-select" onchange="leccionCambiada()">
 			<option value="" selected disabled>Seleccionar</option>
 		</select>
 
@@ -210,21 +210,40 @@
 					>
 						<button onclick="iniciarJuego()" id="iniciarBtn">Iniciar</button>
 						<div id="displayPalabra">
-							<span id="countdown">3</span>
+							<div style="display: grid">
+								<span id="countdown">3</span>
+							</div>
 
-							<div class="word-section" style="height: auto">
+							<div class="word-section" style="height: auto; margin: 10px 0">
 								<p>Palabra:</p>
-								<div id="palabraIngles" style="font-size: 3.2rem; height: auto"></div>
+								<div
+									id="palabraIngles"
+									style="font-size: 3.2rem; height: auto; line-height: 45px"
+								></div>
+
 								<button
 									onclick="pronunciarPalabra()"
 									id="escucharBtn"
-									style="display: none; margin-top: 40px"
+									style="
+										display: none;
+										margin-top: 40px;
+										background-color: whitesmoke;
+										border-radius: 10px;
+										border-color: #f58eeb;
+										color: black;
+										border-style: outset;
+									"
 								>
+									<img
+										src="Imagenes/escuchartraduccion.png"
+										alt="Icono Escuchar"
+										style="width: 20px; vertical-align: middle; background-color: #fff"
+									/>
 									Escuchar
 								</button>
 							</div>
 
-							<div class="word-section">
+							<div class="word-section" style="margin: 0">
 								<p>Pronunciación:</p>
 								<div id="pronunciacion" style="font-size: 1.5rem"></div>
 							</div>
@@ -238,6 +257,26 @@
 								Siguiente
 							</button>
 						</div>
+						<span id="progressCount" style="color: #f17e4d; display: none">0/0</span>
+						<button
+							id="reiniciarBtn"
+							onclick="reiniciarJuego()"
+							style="
+								display: none;
+								background-color: whitesmoke;
+								border-radius: 10px;
+								border-color: #2b8b1a;
+								color: black;
+								border-style: outset;
+							"
+						>
+							<img
+								src="Imagenes/reiniciar.png"
+								alt="Icono Escuchar"
+								style="width: 20px; vertical-align: middle"
+							/>
+							Reiniciar
+						</button>
 					</div>
 				</li>
 				<!--I-E-->
@@ -248,6 +287,33 @@
 		</div>
 
 		<script>
+			function reiniciarJuego() {
+				// Esconde la sección de palabras y el botón Reiniciar
+				document.getElementById("displayPalabra").style.display = "none";
+				document.getElementById("reiniciarBtn").style.display = "none";
+
+				// Muestra el botón de iniciar
+				document.getElementById("iniciarBtn").style.display = "block";
+				//esconde conteo de palabras
+				document.getElementById("progressCount").style.display = "none";
+			}
+
+			function leccionCambiada() {
+				if (document.getElementById("displayPalabra").style.display === "block") {
+					// Esconde la sección de palabras
+					document.getElementById("displayPalabra").style.display = "none";
+
+					// Muestra el botón de iniciar
+					document.getElementById("iniciarBtn").style.display = "block";
+
+					// Esconde el botón Reiniciar
+					document.getElementById("reiniciarBtn").style.display = "none";
+
+					//esconde conteo de palabras
+					document.getElementById("progressCount").style.display = "none";
+				}
+			}
+
 			const backButton = document.querySelector(".menu-back");
 			backButton.addEventListener("click", () => {
 				window.history.back();
@@ -906,15 +972,27 @@
 					data.libros[libroIndex].lecciones[document.getElementById("leccionesSelect").value]
 						.palabras;
 				shuffleArray(leccionActual);
+
+				// Esconder el botón de iniciar
 				document.getElementById("iniciarBtn").style.display = "none";
 
+				// Mostrar la sección de palabra
 				document.getElementById("displayPalabra").style.display = "block";
+
+				document.getElementById("reiniciarBtn").style.display = "block";
+				// Inicializar el contador
+				document.getElementById("progressCount").innerText = `1/${leccionActual.length}`;
+				document.getElementById("progressCount").style.display = "inline";
 
 				siguientePalabra();
 			}
 
 			function siguientePalabra() {
 				palabraIndex++;
+				// Actualizar el contador
+				document.getElementById("progressCount").innerText = `${palabraIndex + 1}/${
+					leccionActual.length
+				}`;
 
 				if (palabraIndex < leccionActual.length) {
 					const palabra = leccionActual[palabraIndex];
