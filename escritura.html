@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Palabras en Inglés</title>
+		<style>
+			/*body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				min-height: 100vh;
+				background-color: #f0f0f0;
+			}
+
+			h1 {
+				text-align: center;
+				color: #333;
+			}
+
+			#contenedor {
+				max-width: 600px;
+				text-align: center;
+			}
+
+			button {
+				cursor: pointer;
+			}
+
+			#resultado {
+				margin-top: 20px;
+				text-align: left;
+			}
+
+			#contenedor {
+				max-width: 600px;
+				margin: auto;
+				text-align: center;
+			}
+
+			#seccionSuperior {
+				position: fixed;
+				top: 0;
+				left: 50%;
+				transform: translateX(-50%);
+				background-color: #fff;
+				padding: 20px;
+				z-index: 10;
+				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			}
+
+			#resultado {
+				margin-top: 150px; 
+				text-align: left;
+			}
+            */
+			#botonMostrarEspanol {
+				display: none;
+				margin-top: 10px;
+			}
+			.espanol {
+				color: #007bff;
+				margin-left: 10px;
+				opacity: 0;
+				transition: opacity 0.5s ease-in-out;
+			}
+
+			body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				min-height: 100vh;
+				background-color: #f0f0f0;
+				margin-right: calc(100vw - 100%);
+			}
+			#contenedor {
+				min-height: 100vh;
+			}
+			#seccionSuperior {
+				background-color: #007bff;
+				min-height: 20vh;
+			}
+			#resultado {
+				height: auto;
+				min-height: 40vh;
+				background-color: aquamarine;
+			}
+		</style>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/uikit@3.13.3/dist/css/uikit.min.css"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/uikit@3.13.3/dist/js/uikit.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/uikit@3.13.3/dist/js/uikit-icons.min.js"></script>
+	</head>
+	<body>
+		<div id="contenedor">
+			<div id="seccionSuperior">
+				<h1>Palabras en Inglés</h1>
+				<label for="numPalabras">Número de palabras: </label>
+				<input type="number" id="numPalabras" min="1" max="6" value="1" />
+				<button onclick="mostrarPalabras()">Mostrar Palabras</button>
+			</div>
+			<div id="resultado"></div>
+			<button id="botonMostrarEspanol" onclick="mostrarEspanol()">Mostrar Traducciones</button>
+		</div>
+
+		<script>
+			const palabras = [
+				{
+					ingles: "to be on a diet",
+					pronunciacion: "tu bí ón a dáiet",
+					espanol: ["Estar a dieta"],
+				},
+				{
+					ingles: "was, were on a diet",
+					pronunciacion: "",
+					espanol: ["Estuvo, Estuvieron a dieta"],
+				},
+				{
+					ingles: "to get fat",
+					pronunciacion: "tu guét fæt",
+					espanol: ["Engordar"],
+				},
+				{
+					ingles: "got fat",
+					pronunciacion: "guát fét",
+					espanol: ["Engordó"],
+				},
+				{
+					ingles: "to cut",
+					pronunciacion: "tu cót",
+					espanol: ["Cortar", "Reajustar"],
+				},
+				{
+					ingles: "cut",
+					pronunciacion: "cót",
+					espanol: ["Cortó", "Reajustó"],
+				},
+			];
+			let traduccionesVisibles = false;
+
+			function mostrarEspanol() {
+				const elementosEspanol = document.querySelectorAll(".espanol");
+
+				if (traduccionesVisibles) {
+					elementosEspanol.forEach((elemento) => (elemento.style.display = "none"));
+				} else {
+					elementosEspanol.forEach((elemento) => (elemento.style.display = "inline"));
+				}
+
+				traduccionesVisibles = !traduccionesVisibles;
+			}
+
+			function mostrarPalabras() {
+				const numPalabras = document.getElementById("numPalabras").value;
+				const palabrasAleatorias = [];
+				const indicesUsados = [];
+
+				for (let i = 0; i < numPalabras; i++) {
+					let indiceAleatorio;
+
+					do {
+						indiceAleatorio = Math.floor(Math.random() * palabras.length);
+					} while (indicesUsados.includes(indiceAleatorio));
+
+					indicesUsados.push(indiceAleatorio);
+					palabrasAleatorias.push(palabras[indiceAleatorio]);
+				}
+
+				const resultadoDiv = document.getElementById("resultado");
+				resultadoDiv.innerHTML = "";
+
+				palabrasAleatorias.forEach((palabra, index) => {
+					const div = document.createElement("div");
+					div.innerHTML = `
+          <strong>${index + 1}.</strong> 
+          <strong>Inglés:</strong> ${palabra.ingles} 
+          <br> 
+          <strong>Pronunciación:</strong> ${palabra.pronunciacion}
+          <span class="espanol"><strong>Español:</strong> ${palabra.espanol.join(", ")}</span>
+        `;
+					resultadoDiv.appendChild(div);
+				});
+
+				document.getElementById("botonMostrarEspanol").style.display = "block";
+				traduccionesVisibles = false;
+			}
+
+			function mostrarEspanol() {
+				const elementosEspanol = document.querySelectorAll(".espanol");
+				const botonMostrarEspanol = document.getElementById("botonMostrarEspanol");
+
+				if (traduccionesVisibles) {
+					elementosEspanol.forEach((elemento) => (elemento.style.opacity = "0"));
+					botonMostrarEspanol.textContent = "Mostrar Traducciones";
+				} else {
+					elementosEspanol.forEach((elemento) => (elemento.style.opacity = "1"));
+					botonMostrarEspanol.textContent = "Ocultar Traducciones";
+				}
+
+				traduccionesVisibles = !traduccionesVisibles;
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Text to Speech Example</title>
+	</head>
+	<body>
+		<button onclick="speakWords()">Speak</button>
+		<select id="voiceSelect"></select>
+		<input type="checkbox" id="slowSpeech" /> Speak Slowly
+		<script>
+			const palabras = [
+				{
+					ingles: "to be on a diet",
+					pronunciacion: "tu bí ón a dáiet",
+					espanol: ["Estar a dieta"],
+				},
+				{
+					ingles: "was, were on a diet",
+					pronunciacion: "",
+					espanol: ["Estuvo, Estuvieron a dieta"],
+				},
+				{
+					ingles: "to get fat",
+					pronunciacion: "tu guét fæt",
+					espanol: ["Engordar"],
+				},
+				{
+					ingles: "got fat",
+					pronunciacion: "guát fét",
+					espanol: ["Engordó"],
+				},
+				{
+					ingles: "to cut",
+					pronunciacion: "tu cót",
+					espanol: ["Cortar", "Reajustar"],
+				},
+				{
+					ingles: "cut",
+					pronunciacion: "cót",
+					espanol: ["Cortó", "Reajustó"],
+				},
+				{
+					ingles: "to mix up",
+					pronunciacion: "tu míxáp",
+					espanol: ["Mezclar", "Revolver", "Confundir"],
+				},
+				{
+					ingles: "mixed up",
+					pronunciacion: "míxtap",
+					espanol: ["Mezcló", "Revolvió", "Confundió"],
+				},
+				{
+					ingles: "to undo",
+					pronunciacion: "tu ondú",
+					espanol: ["Deshacer", "Desbaratar"],
+				},
+				{
+					ingles: "undid",
+					pronunciacion: "",
+					espanol: ["Deshizo", "Desbarató"],
+				},
+				{
+					ingles: "to accept",
+					pronunciacion: "tu aksépt",
+					espanol: ["Aceptar"],
+				},
+				{
+					ingles: "accepted",
+					pronunciacion: "aksépted",
+					espanol: ["Aceptó"],
+				},
+				{
+					ingles: "to break",
+					pronunciacion: "tu bréik",
+					espanol: ["Romper", "Quebrar"],
+				},
+				{
+					ingles: "broke",
+					pronunciacion: "brók",
+					espanol: ["Rompió", "Quebró"],
+				},
+				{
+					ingles: "to spread",
+					pronunciacion: "tu spréd",
+					espanol: ["Untar", "Desparramar", "Dispersar", "Embarrar", "Rociar"],
+				},
+				{
+					ingles: "spread",
+					pronunciacion: "spréd",
+					espanol: ["Untado", "Desparramado", "Dispersado", "Embarrado"],
+				},
+				{
+					ingles: "to break up",
+					pronunciacion: "tu bréik ap",
+					espanol: ["Interrumpir", "Terminar (relaciones)"],
+				},
+				{
+					ingles: "broke up",
+					pronunciacion: "brók ap",
+					espanol: ["Interrumpió", "Terminó (relaciones)"],
+				},
+				{
+					ingles: "to weigh",
+					pronunciacion: "tu wuéi",
+					espanol: ["Pesar"],
+				},
+				{
+					ingles: "weighed",
+					pronunciacion: "wuéired",
+					espanol: ["Pesó"],
+				},
+				{
+					ingles: "to season",
+					pronunciacion: "tu sísn",
+					espanol: ["Sazonar"],
+				},
+				{
+					ingles: "seasoned",
+					pronunciacion: "sisnd",
+					espanol: ["Sazonó"],
+				},
+				{
+					ingles: "to get late",
+					pronunciacion: "tu guét léit",
+					espanol: ["Llegar tarde"],
+				},
+				{
+					ingles: "got late",
+					pronunciacion: "guát leit",
+					espanol: ["Llegó tarde"],
+				},
+				{
+					ingles: "to break down",
+					pronunciacion: "tu bréik daun",
+					espanol: ["Descomponer"],
+				},
+				{
+					ingles: "broke down",
+					pronunciacion: "brók daun",
+					espanol: ["Descompuso"],
+				},
+			];
+
+			let currentWordIndex = 0;
+
+			function speakWords() {
+				if (currentWordIndex >= palabras.length) {
+					currentWordIndex = 0; // Reiniciar si llegamos al final
+					return;
+				}
+
+				const word = palabras[currentWordIndex].ingles;
+
+				const utterance = new SpeechSynthesisUtterance(word);
+
+				// Establecer el tipo de voz según la selección
+				const selectedVoice = document.getElementById("voiceSelect").value;
+				const voices = window.speechSynthesis.getVoices();
+				utterance.voice = voices.find((voice) => voice.voiceURI === selectedVoice);
+
+				// Establecer la velocidad si se marca la opción "Speak Slowly"
+				if (document.getElementById("slowSpeech").checked) {
+					utterance.rate = 0.5; // La velocidad normal es 1
+				}
+
+				// Habla la palabra
+				window.speechSynthesis.speak(utterance);
+
+				// Espera 4 segundos y sigue con la siguiente palabra
+				setTimeout(() => {
+					currentWordIndex++;
+					speakWords();
+				}, 4000);
+			}
+
+			// Esta función es necesaria porque las voces no siempre están disponibles inmediatamente
+			window.speechSynthesis.onvoiceschanged = function () {
+				const voices = window.speechSynthesis.getVoices();
+				const selectElement = document.getElementById("voiceSelect");
+				selectElement.innerHTML = voices
+					.map(
+						(voice) => `<option value="${voice.voiceURI}">${voice.name} (${voice.lang})</option>`
+					)
+					.join("");
+			};
+
+			// ...
+
+			// Esta función llena el select con las voces disponibles
+			function populateVoices() {
+				const voices = window.speechSynthesis.getVoices();
+				const selectElement = document.getElementById("voiceSelect");
+				if (voices.length && selectElement.options.length === 0) {
+					selectElement.innerHTML = voices
+						.map(
+							(voice) => `<option value="${voice.voiceURI}">${voice.name} (${voice.lang})</option>`
+						)
+						.join("");
+				}
+			}
+
+			// Llama a la función para poblar las voces al inicio
+			populateVoices();
+
+			// También la llama cuando las voces cambien
+			window.speechSynthesis.onvoiceschanged = populateVoices;
+		</script>
+	</body>
+</html>
