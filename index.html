@@ -121,7 +121,7 @@
 		<div class="main-content">
 			<div class="container">
 				<h2>Selecciona el Libro</h2>
-				<div class="libro">
+				<div class="libro" onclick="seleccionarLibro(0)">
 					<span class="icono-libro">📚</span>
 					Basic 1
 				</div>
@@ -130,24 +130,27 @@
 					Basic 2
 				</div>
 				<hr />
-				<p>Proximamente</p>
+
 				<!-- Repetir el patrón del ícono y el nombre para los otros libros -->
-				<div class="libro">
+				<div class="libro" onclick="seleccionarLibro(2)">
 					<span class="icono-libro">📚</span>
-					Libro 3
+					Intermediate 1
 				</div>
-				<div class="libro">
+				<div class="libro" onclick="seleccionarLibro(3)">
 					<span class="icono-libro">📚</span>
-					Libro 4
+					Intermediate 2
 				</div>
-				<div class="libro">
+				<hr />
+				<div class="libro" onclick="seleccionarLibro(4)">
 					<span class="icono-libro">📚</span>
-					Libro 5
+					Proficiency 1
 				</div>
-				<div class="libro">
+				<div class="libro" onclick="seleccionarLibro(5)">
 					<span class="icono-libro">📚</span>
-					Libro 6
+					Proficiency 2
 				</div>
+				<hr />
+				<p>Proximamente</p>
 				<div class="libro">
 					<span class="icono-libro">📚</span>
 					Libro 7

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="https://unpkg.com/intro.js/minified/introjs.min.css" />
+		<script src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
+	</head>
+	<body>
+		<div data-intro="Este es el paso 1 de tu tutorial!">Algo interesante aquí</div>
+		<div data-intro="Y este es el paso 2!">Otro elemento interesante</div>
+
+		<script type="text/javascript">
+			// Verifica si el tutorial ya se ha completado antes
+			if (!localStorage.getItem("tutorialDone")) {
+				introJs()
+					.start()
+					.oncomplete(function () {
+						// Marca el tutorial como completado
+						localStorage.setItem("tutorialDone", "true");
+					});
+			}
+		</script>
+	</body>
+</html>
